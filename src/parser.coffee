@@ -20,7 +20,7 @@ class VASTParser
 
     @parse: (url, headers, timeout, logger, cb) ->
         @_parse url, headers, timeout, logger, null, (err, response) ->
-            cb(response)
+            cb(err, response)
 
     @_parse: (url, headers, timeout, logger, parentURLs, cb) ->
 
