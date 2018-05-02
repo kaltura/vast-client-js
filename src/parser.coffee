@@ -31,7 +31,7 @@ class VASTParser
         parentURLs.push url
 
         start = new Date().getTime()
-        URLHandler.get url, headers, timeout, (err, xml) =>
+        URLHandler.get url, headers, timeout, logger, (err, xml) =>
             return cb(err) if err?
             took = new Date().getTime() - start
             logger.log("Vast download took " + took/1000 + " seconds, URL [" + url + "]")
