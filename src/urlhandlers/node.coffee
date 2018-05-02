@@ -5,8 +5,8 @@ https = require 'https'
 DOMParser = require('xmldom').DOMParser
 
 class NodeURLHandler
-    @get: (url, headers, timeout, cb) ->
-        url = uri.parse(url)
+    @get: (urlstr, headers, timeout, logger, cb) ->
+        url = uri.parse(urlstr)
         httpModule = if url.protocol is 'https:' then https else http
         if url.protocol is 'file:'
             fs.readFile url.pathname, 'utf8', (err, data) ->
@@ -25,6 +25,8 @@ class NodeURLHandler
                     data += chunk
                 res.on 'end', ->
                     xml = new DOMParser().parseFromString(data)
+                    unless xml?.documentElement? and xml.documentElement.nodeName is "VAST"
+                         logger.error("Error while parsing VAST received for URL: '" + urlstr + "' got: '" + data + "'");
                     cb(null, xml)
             req.setTimeout timeout, () ->
                 cb('Request timeout')
